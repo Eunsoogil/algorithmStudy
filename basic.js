@@ -42,7 +42,7 @@ allPair : f(n) = n * n => O(n * n)
 
 big O notation에서 log는 1, n, n2을 논하기 때문에 상용로그가 아니고 log2(하단)이다
 
-O(1) > O(logN) > O(N) > O(N * logN) > O(N2) 순으로 효율이 좋다
+O(1) < O(logN) < O(N) < O(N * logN) < O(N2)
 
 JS object
 insertion - O(1)
@@ -142,15 +142,172 @@ ex) int? float? string? array?
 function charCount(str) {
 	var obj = {};
 	for (var char of str) { // for문을 바꿈으로 공간복잡도 줄임
-		char = char.toLowerCase();
-		if(/[a-z0-9]/.test(char)){
+		if(isAlphaNumeric(char)){
 		// regular expression은 브라우저마다 성능이 다르다
-		// charCodeAt으로 바꾸면 더 빠름
-			obj[char] = ++obj[char] || 1; // 삼항연산자이므로 더 빠름
+		// charCodeAt으로 바꾸면 더 빠름, 물론 그렇다고 외울 수는 없고 변경 가능하다는 정도는 알아야함
+			char = char.toLowerCase(); // if문에서 false면 lowercase할 필요 없음
+			obj[char] = ++obj[char] || 1; // 가독성
 		}
 	}
 	return obj;
 }
 
+function isAlphaNumeric(char){
+	var code = char.charCodeAt(0);
+	if(!(code > 47 && code < 58) && // numeric 0 - 9
+		!(code > 64 && code < 91) && // upper alphabet (A-Z)
+		!(code > 96 && code < 123) // lower alphabet (a-z)
+		){
+		return false;
+	}
+	return true;
+}
+
+console.log(charCount("qjnwidoqjwiod"))
+console.log(charCount("hello  hi!!! WORLD!@#"))
 
 
+
+
+
+
+
+
+
+
+
+/*
+problem solving pattern
+아래 명칭들은 offical한 단어는 아님
+
+1. frequency counters
+얼마나 자주 있는지 비교하거나 세는 문제들
+피해야할 상황 nested loop
+
+example
+배열 2개를 받는 same이라는 함수를 만들고 배열 2개 index 순서와 상관없이 첫번째 배열의 값이 다른 배열의 값의 제곱과 같은지 판별
+same([1,2,3], [4,1,9]) //true
+same([1,2,3], [1,9]) // false
+same([1,2,1], [4,4,1]) // false
+*/
+
+//피해야할 솔루션 코드 예시
+function same1(arr1, arr2){
+    if(arr1.length !== arr2.length){
+        return false;
+    }
+    for(let i = 0; i < arr1.length; i++){ // O(N)
+        let correctIndex = arr2.indexOf(arr1[i] ** 2) // O(N)
+        if(correctIndex === -1) {
+            return false;
+        }
+        console.log(arr2);
+        arr2.splice(correctIndex,1) // O(N)
+    } // nested loop(O(N2))
+    return true;
+}
+
+console.log(same1([1,2,3,2], [9,1,4,4]))
+
+//솔루션 코드 리팩토링
+function same2(arr1, arr2){
+    if(arr1.length !== arr2.length){
+        return false;
+    }
+    let frequencyCounter1 = {}
+    let frequencyCounter2 = {}
+    for(let val of arr1){ // O(N)
+        frequencyCounter1[val] = (frequencyCounter1[val] || 0) + 1
+    }
+    for(let val of arr2){ // O(N)
+        frequencyCounter2[val] = (frequencyCounter2[val] || 0) + 1        
+    }
+    console.log(frequencyCounter1);
+    console.log(frequencyCounter2);
+    for(let key in frequencyCounter1){ // O(N)
+        if(!(key ** 2 in frequencyCounter2)){
+            return false
+        }
+        if(frequencyCounter2[key ** 2] !== frequencyCounter1[key]){
+            return false
+        }
+    }
+    return true
+}
+// nested loop 보다 loop가 여러개인것이 당연히 낫다
+// O(N2) > O(3N)
+
+console.log(same2([1,2,3,2], [9,1,4,4]))
+console.log(same2([1,2,3,2,5], [9,1,4,4,11]))
+
+/*
+practice
+
+anagrams
+두 문자열 중 두번째 문자열이 첫번째 문자열의 anagram인지 비교
+anagram : 알파벳 위치를 변경하여 단어 만들기, cinema > iceman
+
+vaildAnagram('', '') // true
+vaildAnagram('aaz', 'zza') // false
+vaildAnagram('anagram', 'nagarma') // true
+*/
+
+function vaildAnagram(str1, str2){
+	//길이 다르면 false 리턴
+	if(str1.length !== str2.length) return false;
+
+	//두 문자열 object 형식으로 바꾸기
+    let frequencyCounter1 = {}
+    let frequencyCounter2 = {}
+    for(let val of str1){
+        frequencyCounter1[val] = (frequencyCounter1[val] || 0) + 1
+    }
+    for(let val of str2){
+        frequencyCounter2[val] = (frequencyCounter2[val] || 0) + 1        
+    }
+	//object 비교
+    for(let key in frequencyCounter1){
+        if(!(key in frequencyCounter2)){
+            return false
+        }
+        if(frequencyCounter2[key] !== frequencyCounter1[key]){
+            return false
+        } 
+    }
+    return true;
+}
+
+console.log(vaildAnagram('', ''))
+console.log(vaildAnagram('aaz', 'zza'))
+console.log(vaildAnagram('anagram', 'nagarma'))
+
+//better solution
+function validAnagramBetter(first, second) {
+  if (first.length !== second.length) {
+    return false;
+  }
+
+  const lookup = {};
+
+  for (let i = 0; i < first.length; i++) {
+    let letter = first[i];
+    // if letter exists, increment, otherwise set to 1
+    lookup[letter] ? lookup[letter] += 1 : lookup[letter] = 1;
+  }
+  console.log(lookup)
+
+  for (let i = 0; i < second.length; i++) {
+    let letter = second[i];
+    // can't find letter or letter is zero then it's not an anagram
+    if (!lookup[letter]) {
+      return false;
+    } else {
+      lookup[letter] -= 1;
+    }
+  }
+
+  return true;
+}
+
+// {a: 0, n: 0, g: 0, r: 0, m: 0,s:1}
+console.log(validAnagramBetter('anagrams', 'nagaramm'))
