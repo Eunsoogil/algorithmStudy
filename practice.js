@@ -7,10 +7,10 @@ function same(list1, list2){
 	if(list1.length !== list2.length) return false;
 	let obj1 = {};
 	let obj2 = {};
-	for (let i of str1) {
+	for (let i of list1) {
 		obj1[i] ? ++obj1[i] : obj1[i] = 1;
 	}
-	for (let i of str2) {
+	for (let i of list2) {
 		obj2[i] ? ++obj2[i] : obj2[i] = 1;
 	}
 	for(let i in obj1){
@@ -29,3 +29,26 @@ console.log(same([1,2,1], [4,4,1])) // false
 // vaildAnagram('', '') // true
 // vaildAnagram('aaz', 'zza') // false
 // vaildAnagram('anagram', 'nagarma') // true
+
+function vaildAnagram(str1, str2){
+	if(str1.length !== str2.length) return false;
+	let obj1 = {};
+	let checkLetter = '';
+	for (var i = 0; i < str1.length; i++) {
+		checkLetter = str1[i];
+		obj1[checkLetter] ? obj1[checkLetter]++ : obj1[checkLetter] = 1;
+	}
+	for (var i = 0; i < str2.length; i++) {
+		checkLetter = str2[i];
+		if(obj1[checkLetter] || obj1[checkLetter] !== 0){
+			obj1[checkLetter]--;
+		} else {
+			return false;
+		}
+	}
+	return true;
+}
+
+console.log(vaildAnagram('', '')) // true
+console.log(vaildAnagram('aaz', 'zza')) // false
+console.log(vaildAnagram('anagram', 'nagarma')) // true

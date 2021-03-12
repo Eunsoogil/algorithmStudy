@@ -311,3 +311,103 @@ function validAnagramBetter(first, second) {
 
 // {a: 0, n: 0, g: 0, r: 0, m: 0,s:1}
 console.log(validAnagramBetter('anagrams', 'nagaramm'))
+
+
+/*
+2. multiple pointers
+포인터나 값을 생성하고 그게 인덱스나 위치를 변경할 수 있는 문제들
+
+example
+sumZero라는 함수를 만들고, "정렬된(sorted)" 배열 원소들 중 합이 0이 되는 가장 빠른 원소 찾기
+index가 가장 낮은 값 return, 찾기 못하면 0 혹은 undefined return
+
+sumZero([-3,-2,-1,0,1,2,3]) // [-3,3]
+sumZero([1,2,3]) // 0 or undefined
+sumZero([-2,0,1,3]) // 0 or undefined
+sumZero([-4,-3,-2,-1,0,1,2,5]) // [-2,2]
+*/
+
+// naive solution
+function sumZero(arr){
+    for(let i = 0; i < arr.length; i++){
+        for(let j = i+1; j < arr.length; j++){
+            if(arr[i] + arr[j] === 0){
+                return [arr[i], arr[j]];
+            }
+        }
+    }
+} // nested loop
+
+
+// refactor
+function sumZero(arr){
+	let left = 0;
+	let right = arr.length - 1;
+	while(left < right){
+		let sum = arr[left] + arr[right];
+		if(sum === 0){
+			return [arr[left], arr[right]];
+		} else if(sum > 0){
+			right--;
+		} else {
+			left++;
+		}
+	}
+} // O(N)
+
+/*
+practice
+count unique values
+정렬된 배열을 받아 유니크한 원소의 개수 세기
+countUniqueValues([1,1,1,1,2]) // 2
+countUniqueValues([1,2,3,4,4,4,7,7,12,12,13]) // 7
+countUniqueValues([]) // 0
+countUniqueValues([-2,-1,-1,0,1]) // 4
+
+*/
+
+function countUniqueValues(arr1){
+	let count = 0;
+	let prev;
+	if(arr1[0]){
+		prev = arr1[0];
+		count = 1;
+	} else {
+		return 0;
+	}
+	
+	for (var i = 1; i < arr1.length; i++) {
+		if(prev !== arr1[i]){
+			prev = arr1[i];
+			count++
+		}
+	}
+	return count;
+}
+console.log(countUniqueValues([1,1,1,1,2])) // 2
+console.log(countUniqueValues([1,2,3,4,4,4,7,7,12,12,13])) // 7
+console.log(countUniqueValues([])) // 0
+console.log(countUniqueValues([-2,-1,-1,0,1])) // 4
+
+// solution
+function countUniqueValues(arr){
+    if(arr.length === 0) return 0;
+    var i = 0;
+    for(var j = 1; j < arr.length; j++){
+        if(arr[i] !== arr[j]){
+            i++;
+            arr[i] = arr[j]
+        }
+    }
+    return i + 1;
+}
+countUniqueValues([1,2,2,5,7,7,99])
+
+/*
+3. sliding window
+포인터나 값을 생성하고 그게 인덱스나 위치를 변경할 수 있는 문제들
+
+example
+sumZero라는 함수를 만들고, "정렬된(sorted)" 배열 원소들 중 합이 0이 되는 가장 빠른 원소 찾기
+index가 가장 낮은 값 return, 찾기 못하면 0 혹은 undefined return
+*/
