@@ -408,6 +408,95 @@ countUniqueValues([1,2,2,5,7,7,99])
 포인터나 값을 생성하고 그게 인덱스나 위치를 변경할 수 있는 문제들
 
 example
-sumZero라는 함수를 만들고, "정렬된(sorted)" 배열 원소들 중 합이 0이 되는 가장 빠른 원소 찾기
-index가 가장 낮은 값 return, 찾기 못하면 0 혹은 undefined return
+배열과 인트를 받아 배열의 일부를 인트만큼 더했을때 가장 큰 값
+maxSubarraySum([1,2,5,2,8,1,5],2) // 10
+maxSubarraySum([1,2,5,2,8,1,5],4) // 17
+maxSubarraySum([4,2,1,6],1) // 6
+maxSubarraySum([4,2,1,6,2],4) // 13
+maxSubarraySum([],4) // null
 */
+
+// naive
+// num만큼을 계속 더해보고 비교하는 방식
+function maxSubarraySum(arr, num){
+    if(num > arr.length){
+        return null;
+    }
+    let max = -Infinity;
+    let temp;
+    for (let i = 0; i < arr.length - num + 1; i++) {
+        temp = 0;
+        for (let j = 0; j < num; j++) {
+            temp += arr[i + j];
+        }
+        if(temp > max){
+            max = temp;
+        }
+    }
+    return max;
+} // nested loop
+
+// refactor
+// 초기값을 구한 다음 가장 작은 인덱스인 배열값을 빼고 가장 큰 인덱스인 배열값을 더하는 식 
+function maxSubarraySum(arr, num){
+  let maxSum = 0;
+  let tempSum = 0;
+  if (arr.length < num) return null;
+  for (let i = 0; i < num; i++) {
+    maxSum += arr[i];
+  }
+  tempSum = maxSum;
+  for (let i = num; i < arr.length; i++) {
+    tempSum = tempSum - arr[i - num] + arr[i];
+    maxSum = Math.max(maxSum, tempSum);
+  }
+  return maxSum;
+} // O(N)
+
+maxSubarraySum([2,6,9,2,1,8,5,6,3],3)
+
+
+/*
+4. divide and conquer 
+실제 사전적 용어
+데이터를 작게 나눈 후 나눈 데이터를 똑같이 반복
+
+example
+정렬된 배열과 인트를 받고, 배열의 값이 인트인 인덱스 찾기
+search([1,2,3,4,5,6], 4) // 3
+search([1,2,3,4,5,6], 6) // 5
+search([1,2,3,4,5,6], 11) // -1
+*/
+
+//naive
+//linear search
+function search(arr, val){
+    for (let i = 0; i < arr.length; i++) {
+        if(arr[i] === val){
+            return i;
+        }
+    }
+    return -1;
+}
+
+//refactor
+//binary search
+function search(arr, val){
+    let min = 0;
+    let max = array.length - 1;
+
+    while(min < max){
+        let middle = Math.floor((min + max) / 2);
+        let currentElement = array[middle];
+
+        if(array[middle] < val){
+            min = middle + 1;
+        } else if(array[middle] > val){
+            max = middle - 1;
+        } else {
+            return middle;
+        }
+    }
+
+    return -1;
+} // O(logN)
