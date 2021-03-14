@@ -156,6 +156,29 @@ Time Complexity - O(N + M)
 Space Complexity - O(1)
 */
 
+function isSubsequence(str1, str2){
+// while로 앞에서 부터 찾고 만약 첫번째 단어 index가 length -1
+//에 도달하지 못하면 return false
+	let i = 0;
+	let j = 0;
+	while(j < str2.length){
+		if(str1[i] === str2[j]){
+			i++;
+			j++;
+		} else {
+			j++;
+		}
+	}
+	if(i <= str1.length - 1){
+		return false;
+	} else {
+		return true;
+	}
+}
+
+console.log(isSubsequence('hello', 'hello world')) // true
+console.log(isSubsequence('sing', 'sting')) // true
+console.log(isSubsequence('abc', 'acb')) // false
 
 /*
 Sliding Window - maxSubarraySum
