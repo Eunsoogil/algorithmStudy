@@ -199,13 +199,39 @@ Constraints:
 Time Complexity - O(N)
 Space Complexity - O(1)
 */
+function maxSubarraySum(arr, num){
+	// array length가 num보다 작으면 null return
+	if(arr.length < num) return null;
 
+	// 결과가 배열순이므로 while로 돌면서 값을 더해나가고(더할때 가장 작은 index를 빼고 가장 큰 index더하기)
+	// 가장 큰 값 return
+	let i;
+	let sum = 0;
+	let temp = 0;
+	for (i = 0; i < num; i++) {
+		temp += arr[i];
+	}
+	i = 0;
+	while(i < arr.length - num + 1){
+		if(temp > sum) sum = temp;
+		temp = temp + arr[i + num] - arr[i];
+		i++;
+	}	
+	return sum;
+}
 
-
+console.log(maxSubarraySum([100,200,300,400], 2)) // 700
+console.log(maxSubarraySum([1,4,2,10,23,3,1,0,20], 4)) // 39
+console.log(maxSubarraySum([-3,4,0,-2,6,-1], 2)) // 5
+console.log(maxSubarraySum([3,-2,7,-4,1,-1,4,-2,1], 2)) // 5
+console.log(maxSubarraySum([2,3], 3)) // null
 /*
 Sliding Window - minSubArrayLen
-Write a function called minSubArrayLen which accepts two parameters - an array of positive integers and a positive integer.
-This function should return the minimal length of a contiguous subarray of which the sum is greater than or equal to the integer passed to the function. If there isn't one, return 0 instead.
+Write a function called minSubArrayLen which accepts two parameters
+- an array of positive integers and a positive integer.
+This function should return the minimal length of a contiguous subarray
+of which the sum is greater than or equal to the integer passed to the function.
+If there isn't one, return 0 instead.
 
 examples
 minSubArrayLen([2,3,1,2,4,3], 7) // 2 -> [4,3] is the smallest subarray
@@ -218,9 +244,70 @@ minSubArrayLen([1,4,16,22,5,7,8,9,10], 95) // 0
 Time Complexity - O(n)
 Space Complexity - O(1)
 */
+function minSubArrayLen(arr, num){
+	// 다 더한다
+	let sum = 0;
+	let i, length;
+	for(i of arr){
+		sum += i;
+	}
+	if(num < sum){
+		length = arr.length - 1;
+		i = 0;
+	} else {
+		return 0;
+	}
+	// 앞에서부터 빼고 뒤를 빼서 가장 작은 경우 구하기
+	let sumForBack = sum;
+	while(true){
+		if(arr[i] > num) return 1;
+		sum -= arr[i];
+		if(num > sum){
+			sum += arr[i];
+			break;
+		}
+		i++;
+	}
+	while(true){
+		if(arr[length] > num) return 1;
+		sum -= arr[length];
+		if(num > sum){
+			break;
+		}
+		length--;		
+	}
 
+	let front = length - i + 1;
 
+	// 뒤에서부터 빼고 앞을 빼서 가장 작은 경우 구하기
+	length = arr.length - 1;
+	i = 0;
+	while(true){
+		sumForBack -= arr[length];
+		if(num > sumForBack){
+			sumForBack += arr[length];
+			break;
+		}
+		length--;		
+	}
+	while(true){
+		sumForBack -= arr[i];
+		if(num > sumForBack){
+			break;
+		}
+		i++;
+	}
 
+	if(front < length - i + 1) return front;
+	return length - i + 1;
+}
+
+console.log(minSubArrayLen([2,3,1,2,4,3], 7)) // 2 -> [4,3] is the smallest subarray
+console.log(minSubArrayLen([2,1,6,5,4], 9)) // 2 -> [5,4]
+console.log(minSubArrayLen([3,1,7,11,2,9,8,21,62,33,19], 52)) // 1
+console.log(minSubArrayLen([1,4,16,22,5,7,8,9,10], 39)) // 3
+console.log(minSubArrayLen([1,4,16,22,5,7,8,9,10], 55)) // 5
+console.log(minSubArrayLen([1,4,16,22,5,7,8,9,10], 95)) // 0
 /*
 Sliding Window - findLongestSubstring
 Write a function called findLongestSubstring, which accepts a string and returns the length of the longest substring with all distinct characters.
