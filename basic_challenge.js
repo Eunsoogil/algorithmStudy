@@ -245,61 +245,25 @@ Time Complexity - O(n)
 Space Complexity - O(1)
 */
 function minSubArrayLen(arr, num){
-	// 다 더한다
+	let start = 0;
 	let sum = 0;
-	let i, length;
-	for(i of arr){
-		sum += i;
-	}
-	if(num < sum){
-		length = arr.length - 1;
-		i = 0;
-	} else {
-		return 0;
-	}
-	// 앞에서부터 빼고 뒤를 빼서 가장 작은 경우 구하기
-	let sumForBack = sum;
-	while(true){
-		if(arr[i] > num) return 1;
-		sum -= arr[i];
-		if(num > sum){
-			sum += arr[i];
+	let end = 0;
+	let minlen = Infinity;
+
+	while(arr.length > start){
+		if(sum < num && end < arr.length){
+			sum += arr[end];
+			end++;
+		} else if(sum >= num){
+			minlen = Math.min(minlen, end - start);
+			sum -= arr[start];
+			start++;
+		} else {
 			break;
 		}
-		i++;
-	}
-	while(true){
-		if(arr[length] > num) return 1;
-		sum -= arr[length];
-		if(num > sum){
-			break;
-		}
-		length--;		
 	}
 
-	let front = length - i + 1;
-
-	// 뒤에서부터 빼고 앞을 빼서 가장 작은 경우 구하기
-	length = arr.length - 1;
-	i = 0;
-	while(true){
-		sumForBack -= arr[length];
-		if(num > sumForBack){
-			sumForBack += arr[length];
-			break;
-		}
-		length--;		
-	}
-	while(true){
-		sumForBack -= arr[i];
-		if(num > sumForBack){
-			break;
-		}
-		i++;
-	}
-
-	if(front < length - i + 1) return front;
-	return length - i + 1;
+	return minlen === Infinity ? 0 : minlen;
 }
 
 console.log(minSubArrayLen([2,3,1,2,4,3], 7)) // 2 -> [4,3] is the smallest subarray
@@ -310,7 +274,8 @@ console.log(minSubArrayLen([1,4,16,22,5,7,8,9,10], 55)) // 5
 console.log(minSubArrayLen([1,4,16,22,5,7,8,9,10], 95)) // 0
 /*
 Sliding Window - findLongestSubstring
-Write a function called findLongestSubstring, which accepts a string and returns the length of the longest substring with all distinct characters.
+Write a function called findLongestSubstring, which accepts a string 
+and returns the length of the longest substring with all distinct characters.
 
 examples
 findLongestSubstring('') // 0
@@ -323,3 +288,26 @@ findLongestSubstring('longestsubstring') // 8
 
 Time Complexity - O(n)
 */
+
+function findLongestSubstring(str){
+	// 배열로 전환한다음 object에 넣어가며 key들 중 value가 1이상이되면 이전 인덱스 return
+	if(str.length === 0) return 0;
+	let key = '';
+	let obj = {};
+	let start = 0;
+	let end = 0;
+	let result = 0;
+
+	while(start < str.length){
+		if(){
+
+		}
+	}
+}
+
+console.log(findLongestSubstring('')) // 0
+console.log(findLongestSubstring('rithmschool')) // 7
+console.log(findLongestSubstring('thisisawesome')) // 6
+console.log(findLongestSubstring('thecatinthehat')) // 7
+console.log(findLongestSubstring('bbbbbb')) // 1
+console.log(findLongestSubstring('longestsubstring')) // 8
