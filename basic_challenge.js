@@ -298,11 +298,12 @@ function findLongestSubstring(str){
 	let end = 0;
 	let result = 0;
 
-	while(start < str.length && end < str.length){
-		if(obj[str[end]]){
+	while(start < str.length && end <= str.length){
+		if(obj[str[end]] || end === str.length){
 			if(result < end - start) result = end - start;
-			obj[str[start]] = 0;
+			obj = {};
 			start++;
+			end = start;
 		} else {
 			obj[str[end]] = 1;
 			end++;
