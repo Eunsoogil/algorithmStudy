@@ -92,3 +92,120 @@ console.log(binarySearch([1,2,3,4,5,6],3)) // 2
 console.log(binarySearch([1,2,3,4,5],5)) // 4
 console.log(binarySearch([1,2,3,4,5],6)) // -1
 console.log(binarySearch([5,6,10,13,14,18,30,34,35,37,40,44,64,79,84,86,95,96,98,99], 95)) // 16
+
+
+// Original Solution
+function binarySearch1(arr, elem) {
+    var start = 0;
+    var end = arr.length - 1;
+    var middle = Math.floor((start + end) / 2);
+    while(arr[middle] !== elem && start <= end) {
+        if(elem < arr[middle]){
+            end = middle - 1;
+        } else {
+            start = middle + 1;
+        }
+        middle = Math.floor((start + end) / 2);
+    }
+    if(arr[middle] === elem){
+        return middle;
+    }
+    return -1;
+}
+
+// Refactored Version
+function binarySearch2(arr, elem) {
+    var start = 0;
+    var end = arr.length - 1;
+    var middle = Math.floor((start + end) / 2);
+    while(arr[middle] !== elem && start <= end) {
+        if(elem < arr[middle]) end = middle - 1;
+        else start = middle + 1;
+        middle = Math.floor((start + end) / 2);
+    }
+    return arr[middle] === elem ? middle : -1;
+}
+
+console.log(binarySearch([2,5,6,9,13,15,28,30], 103))
+
+
+/*
+naive string search
+O(N * M)
+그냥 앞에서부터 찾아가며 검색, 앞의 한 글자가 맞으면 다음글자도 맞는지 확인
+*/
+function naiveSearch(long, short){
+    var count = 0;
+    for(var i = 0; i < long.length; i++){
+        for(var j = 0; j < short.length; j++){
+           if(short[j] !== long[i+j]) break;
+           if(j === short.length - 1) count++;
+        }
+    }
+    return count;
+}
+
+console.log(naiveSearch("lorie loled", "lol"))
+
+/*
+KMP algorithm
+Knuth-Morris-Pratt string search algorithm
+
+*/
+
+function makeTable(str) {
+  
+    
+    var table = new Array(str.length);
+    var maxPrefix = 0;
+    
+    table[0] = 0;
+  
+    
+    for (var i = 1; i < str.length; i++) {
+      while (maxPrefix > 0 && str.charAt(i) !== str.charAt(maxPrefix)) {
+        
+        maxPrefix = table[maxPrefix - 1];
+      }
+      
+      if (str.charAt(maxPrefix) === str.charAt(i)) {
+        maxPrefix++;
+      }
+      table[i] = maxPrefix;
+    }
+    return table;
+  }
+   
+    var prefixes = makeTable(word);
+    var matches = [];
+    
+    
+    var j = 0;
+    var i = 0;
+    while (i < str.length) {
+      
+      if (str.charAt(i) === word.charAt(j)) {
+        i++;
+        j++;
+      }
+      
+      if (j === word.length) {
+        matches.push(i-j);
+        
+        j = prefixes[j-1];
+      }
+      
+      else if (str.charAt(i) !== word.charAt(j)) {
+          
+          if (j !== 0) {
+              j = prefixes[j-1];
+          } else {
+              
+              i++;
+          }
+      }
+    }
+  
+    return matches;
+  }
+console.log(kmpMatching("it implies that it is very important","impo")) // 27
