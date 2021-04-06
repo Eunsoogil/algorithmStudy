@@ -282,3 +282,53 @@ function quickSort(arr, left = 0, right = arr.length -1){
 quickSort([100,-3,2,4,6,9,1,2,5,3,23])
 
 //시간복잡도 : O(N logN), worst case는 모두 이미 정렬되어 있다면 O(N2)
+
+/*
+radix sort
+comparison sort : bubble sort, insertion sort, selection sort, merge sort, quick sort
+not comparison sort : radix sort
+
+radix sort : 숫자 정렬이여야 가능
+방식 : 0~9까지를 담는 자료구조에 일의 자리부터 0~9까지 매칭한 다음 순차적으로(0~9까지) 정렬, 그 다음은 십의 자리수
+계속 반복하면 0에 자연스럽게 정렬된다(비교 정렬이 아님) 
+*/
+
+//helper methods
+function getDigit(num, i) {
+  return Math.floor(Math.abs(num) / Math.pow(10, i)) % 10;
+}
+//getDigit(1234,0); // 4
+//getDigit(1234,1); // 3
+
+function digitCount(num) {
+  if (num === 0) return 1;
+  return Math.floor(Math.log10(Math.abs(num))) + 1;
+}
+//digitCount(1); // 1
+//digitCount(25); // 2
+//digitCount(235); // 3
+function mostDigits(nums) {
+  let maxDigits = 0;
+  for (let i = 0; i < nums.length; i++) {
+    maxDigits = Math.max(maxDigits, digitCount(nums[i]));
+  }
+  return maxDigits;
+}
+//가장 큰 자릿수를 return
+//mostDigits([1234, 56, 7]) // 4
+
+function radixSort(nums){
+    let maxDigitCount = mostDigits(nums);
+    for(let k = 0; k < maxDigitCount; k++){
+        let digitBuckets = Array.from({length: 10}, () => []);
+        for(let i = 0; i < nums.length; i++){
+            let digit = getDigit(nums[i],k);
+            digitBuckets[digit].push(nums[i]);
+        }
+        nums = [].concat(...digitBuckets);
+    }
+    return nums;
+}
+
+radixSort([23,345,5467,12,2345,9852])
+// 시간복잡도 : O(nk), k = 자릿수
