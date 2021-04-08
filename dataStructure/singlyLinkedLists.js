@@ -161,12 +161,163 @@ class SinglyLinkedList{
         this.length++;
         return this;
     }
+
+    //practice
+    get(idx){
+    	if(idx < 0 || idx >= this.length) return null;
+    	var cnt = 0;
+    	var current = this.head;
+    	while(cnt !== idx){
+    		current = current.next;
+    		cnt++;
+    	}
+    	return current;
+    }
+
+    //solution
+    // get(index){
+    //     if(index < 0 || index >= this.length) return null;
+    //     var counter = 0;
+    //     var current = this.head;
+    //     while(counter !== index){
+    //         current = current.next;
+    //         counter++;
+    //     }
+    //     return current;
+    // }
+
+    //practice
+    // set(idx, val){
+    // 	var current = this.get(idx);
+    // 	if(!current){
+    // 		return false;
+    // 	} else {
+    // 		var newNode = new Node(val);
+    // 		newNode.next = current.next;
+    // 		var previous = this.get(idx-1);
+    // 		if(!previous){
+    // 			this.head.next = newNode;
+    // 		} else {
+    // 			previous.next = newNode;
+    // 		}
+    // 		return true;
+    // 	}
+    // }
+
+    //solution...
+    set(index, val){
+        var foundNode = this.get(index);
+        if(foundNode){
+            foundNode.val = val;
+            return true;
+        }
+        return false;
+    }
+
+    //practice
+	// insert(idx, val){
+	// 	if(idx < 0 || idx >= this.length) return false;
+	// 	if(idx === this.length){
+	// 		this.push(val);
+	// 	} else if(idx === 0){
+	// 		this.unshift(val);
+	// 	} else {
+	// 		var current = this.get(idx);
+	// 		var newNode = new Node(val);
+	// 		newNode.next = current;
+	// 		var previous = this.get(idx-1);
+	// 		previous.next = newNode;
+	// 		this.length++;
+	// 	}
+	// 	return true;
+	// }
+
+    //solution
+    // !!object => true
+    insert(index, val){
+        if(index < 0 || index > this.length) return false;
+        if(index === this.length) return !!this.push(val);
+        if(index === 0) return !!this.unshift(val);
+        
+        var newNode = new Node(val);
+        var prev = this.get(index - 1);
+        var temp = prev.next;
+        prev.next = newNode;
+        newNode.next = temp;
+        this.length++;
+        return true;
+    }
+
+    //practice
+    remove(idx){
+        if(idx < 0 || idx > this.length) return undefined;
+        if(idx === this.length - 1) return this.pop(idx);
+        if(idx === 0) return this.shift(idx);
+
+        var current = this.get(idx - 1);
+        var target = current.next;
+        current.next = target.next;
+        this.length--;
+        return target;
+    }
+
+    //solution
+    // remove(index){
+    //     if(index < 0 || index >= this.length) return undefined;
+    //     if(index === 0) return this.shift();
+    //     if(index === this.length - 1) return this.pop();
+    //     var previousNode = this.get(index - 1);
+    //     var removed = previousNode.next;
+    //     previousNode.next = removed.next;
+    //     this.length--;
+    //     return removed;
+    // }
+
+    //practice
+    // reverse(){
+    // 	var prev;
+    // 	var next;
+    // 	var node = this.head;
+    // 	this.head = this.tail;
+    // 	this.tail = node;
+    // 	while(node.next){
+    // 		next = node.next;
+    // 		prev = node;
+    // 		node.next = prev;
+    // 		node = next;
+    // 	}
+    // }
+    //solution
+    reverse(){
+      var node = this.head;
+      this.head = this.tail;
+      this.tail = node;
+      var next;
+      var prev = null;
+      for(var i = 0; i < this.length; i++){
+        next = node.next;
+        node.next = prev;
+        prev = node;
+        node = next;
+      }
+      return this;
+    }
+
+    print(){
+        var arr = [];
+        var current = this.head
+        while(current){
+            arr.push(current.val)
+            current = current.next
+        }
+        console.log(arr);
+    }
 }
 
 let list = new SinglyLinkedList();
-list.push('1').push('2').push('3');
-list.unshift('9');
-console.log(list)
+list.push('1').push('2').push('3').push('4');
+list.reverse();
 let list1 = new SinglyLinkedList();
-list1.push('9').push('1').push('2').push('3');
+list1.push('4').push('3').push('2').push('1');
+console.log(list);
 console.log(list1)
