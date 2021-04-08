@@ -321,3 +321,17 @@ let list1 = new SinglyLinkedList();
 list1.push('4').push('3').push('2').push('1');
 console.log(list);
 console.log(list1)
+
+/*
+big O notation of Singly linked lists
+insertion - O(1)
+removal - O(1) ~ O(N)
+searching - O(N)
+Access - O(N)
+
+array
+insertion - O(N)
+removal - O(1) ~ O(N)
+searching - O(N)
+Access - O(1)
+*/
