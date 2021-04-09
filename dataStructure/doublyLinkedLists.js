@@ -261,15 +261,40 @@ class DoublyLinkedList{
     }
 
 	//practice - reverse
+	reverse(){
+		if(this.length <= 1) return this;
+		var prevTail = this.tail;
+		// console.log(prevTail)
+		this.head = this.tail;
+		this.tail = this.head;
+
+		var current = this.head;
+		// console.log(current)
+		var cnt = 0;
+		while(prevTail.prev){
+			if(cnt === 5) break;
+			// console.log(prevTail)
+			current.next = prevTail.prev;
+			current.prev = prevTail.next;
+
+			current = current.next;
+			prevTail = prevTail.prev;
+			cnt++
+		}
+		this.head.prev = null;
+		this.tail.next = null;
+		return this;
+	}
 }
 
 var list = new DoublyLinkedList();
-list.push(1).push(2).push(3);
-// console.log(list)
-// console.log(list.pop())
-// console.log(list)
-list.insert(2, 9);
+list.push(1).push(2).push(3).push(4);
 console.log(list);
+console.log('-----')
+var list1 = new DoublyLinkedList();
+list1.push(4).push(3).push(2).push(1);
+console.log(list1);
+console.log(list1.reverse());
 
 
 /*
