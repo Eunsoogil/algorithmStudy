@@ -262,28 +262,18 @@ class DoublyLinkedList{
 
 	//practice - reverse
 	reverse(){
-		if(this.length <= 1) return this;
-		var prevTail = this.tail;
-		// console.log(prevTail)
-		this.head = this.tail;
-		this.tail = this.head;
-
-		var current = this.head;
-		// console.log(current)
-		var cnt = 0;
-		while(prevTail.prev){
-			if(cnt === 5) break;
-			// console.log(prevTail)
-			current.next = prevTail.prev;
-			current.prev = prevTail.next;
-
-			current = current.next;
-			prevTail = prevTail.prev;
-			cnt++
-		}
-		this.head.prev = null;
-		this.tail.next = null;
-		return this;
+      var node = this.head;
+      this.head = this.tail;
+      this.tail = node;
+      var next;
+      var prev = null;
+      for(var i = 0; i < this.length; i++){
+        next = node.next;
+        node.next = prev;
+        prev = node;
+        node = next;
+      }
+      return this;
 	}
 }
 
