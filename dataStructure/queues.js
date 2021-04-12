@@ -1,16 +1,13 @@
 /*
-stacks
-LIFO : last in first out
-call stack : stacks
-가장 마지막에 삽입된 자료가 가장 먼저 삭제
+queues
+FIFO : first in first out
+가장 먼저 삽입된 자료가 가장 먼저 삭제
 
-사용 : 함수를 관리(call stack)
-undo / redo
-routing (history object)
-
-이미 built-in array로 구현된 것이나 마찬가지
-하지만 first out시 index를 다시 작업해야하므로 효율이 좋지 않다
-singly linked list를 사용
+사용 : 
+waiting line of online game etc
+background tasks
+uploading resources
+printing / task processing
 */
 
 class Node {
@@ -20,28 +17,29 @@ class Node {
     }
 }
 
-class Stack {
+class Queue {
     constructor(){
         this.first = null;
         this.last = null;
         this.size = 0;
     }
-    push(val){
+    enqueue(val){
         var newNode = new Node(val);
         if(!this.first){
             this.first = newNode;
             this.last = newNode;
         } else {
-            var temp = this.first;
-            this.first = newNode;
-            this.first.next = temp;
+            this.last.next = newNode;
+            this.last = newNode;
         }
         return ++this.size;
     }
-    pop(){
+
+    dequeue(){
         if(!this.first) return null;
+
         var temp = this.first;
-        if(this.first === this.last){
+        if(this.first === this.last) {
             this.last = null;
         }
         this.first = this.first.next;
@@ -56,4 +54,6 @@ insertion - O(1)
 removal - O(1)
 searching - O(N)
 access - O(N)
+
+
 */
