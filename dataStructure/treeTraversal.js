@@ -6,9 +6,24 @@ tree검색 일반적인 방식
 - breadth-first search(BFS) : 계층별 검색, 가로로 위에서 아래로
 - depth-first search(DFS) : 세로형 검색
 
+
+      1
+  2       3
+4   5   6   7
+
+
+BFS : root -> left -> right(계층 검색)
+  => 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+
 DFS preorder : root -> left -> right
+  => 1 -> 2 -> 4 -> 5 -> 3 -> 6 -> 7
+
 DFS inorder : left -> root -> right
+  => 4 -> 2 -> 5 -> 1 -> 3 -> 6 -> 7
+
 DFS postorder : left -> right -> root
+  => 4 -> 5 -> 2 -> 6 -> 7 -> 3 -> 1
+
 */
 
 class Node {
@@ -78,6 +93,18 @@ class BinarySearchTree {
         }
         return false;
     }
+    /*
+
+      1
+  2       3
+4   5   6   7
+
+
+BFS : root -> left -> right(계층 검색)
+  => 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+
+    */
+
     BFS(){
         var node = this.root,
             data = [],
@@ -92,6 +119,19 @@ class BinarySearchTree {
         }
         return data;
     }
+
+    /*
+    
+      1
+  2       3
+4   5   6   7
+
+
+DFS preorder : root -> left -> right
+  => 1 -> 2 -> 4 -> 5 -> 3 -> 6 -> 7
+
+    */
+
     DFSPreOrder(){
         var data = [];
         function traverse(node){
@@ -102,6 +142,19 @@ class BinarySearchTree {
         traverse(this.root);
         return data;
     }
+
+    /*
+    
+      1
+  2       3
+4   5   6   7
+
+
+DFS postorder : left -> right -> root
+  => 4 -> 5 -> 2 -> 6 -> 7 -> 3 -> 1
+
+    */
+
     DFSPostOrder(){
         var data = [];
         function traverse(node){
@@ -112,6 +165,19 @@ class BinarySearchTree {
         traverse(this.root);
         return data;
     }
+
+    /*
+    
+      1
+  2       3
+4   5   6   7
+
+
+DFS inorder : left -> root -> right
+  => 4 -> 2 -> 5 -> 1 -> 3 -> 6 -> 7
+
+    */
+
     DFSInOrder(){
         var data = [];
         function traverse(node){
@@ -133,3 +199,22 @@ tree.insert(3);
 tree.insert(8);
 tree.insert(20);
 tree.BFS();
+
+/*
+BFS나 DFS는 시간복잡도는 같다
+차이점은 공간복잡도!
+
+DFS를 써야할 경우
+만약 깊이가 깊고 모든 노드가 꽉 차있다면 BFS의 경우 공간복잡도를 크게 낭비한다
+  => 좌측 우측을 저장해 나가는 꼴로 진행되므로
+
+반면, 이경우 DFS라면 깊이를 먼저 찾고 없으면 다음 형제를 찾으므로 공간복잡도 낭비를 줄인다
+
+BFS를 써야하는 경우
+DFS의 경우 좌 우측 node를 저장한다 하지만 좌측이나 우측 중 하나가 없이 깊은 노드라면
+
+*/
+
+
+
+
